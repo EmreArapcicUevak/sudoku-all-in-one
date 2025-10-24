@@ -3,7 +3,7 @@ from aima_toolkit.ConstraintSatisfactionProblemPackage.PremadeConstraints import
 from aima_toolkit.ConstraintSatisfactionProblemPackage.ConstraintPropagation import ac3
 from aima_toolkit.ConstraintSatisfactionProblemPackage.Search import backtracking_search
 
-def solve(grid : list[list[int]]) -> list[list[int]] | bool:
+def solve(grid : list[list[int]], additional_constraints : list[tuple[str, tuple[str, ...]]] = []) -> list[list[int]] | bool:
   assert len(grid) == 9
 
   variables = [f"X{i}{j}" for i in range(1, 10) for j in range(1, 10)]
@@ -35,6 +35,9 @@ def solve(grid : list[list[int]]) -> list[list[int]] | bool:
     add_alldiff_constraint_as_binary_constraint( sudoku_csp, { f"X{row}{i}" for row in range( 1, 10 ) } )  # Add all horizontal constraints
 
 
+
+
+  # Add aditional constraints
   # try to cut down the domain at start, if found not possible return False to mark there is no solution
   if not ac3( sudoku_csp ): return False
 
