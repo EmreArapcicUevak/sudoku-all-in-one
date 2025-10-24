@@ -2,6 +2,17 @@ from aima_toolkit.ConstraintSatisfactionProblemPackage import ConstraintSatisfac
 from aima_toolkit.ConstraintSatisfactionProblemPackage.PremadeConstraints import add_alldiff_constraint_as_binary_constraint
 from aima_toolkit.ConstraintSatisfactionProblemPackage.ConstraintPropagation import ac3
 from aima_toolkit.ConstraintSatisfactionProblemPackage.Search import backtracking_search
+from PythonCSPSolver.AdditionalConstraints import *
+
+constraint_adding_functions = {
+  'white dot' : add_white_dot_constraint,
+  'black dot' : add_black_dot_constraint,
+  'kings move' : add_kings_move_constraint,
+  'knights move' : add_knights_move_constraint,
+  'sudoku x' : add_sudoku_x_constraint,
+  'thermo' : add_thermo_constraint,
+  'german whisper' : add_german_whisper_constraint,
+}
 
 def solve(grid : list[list[int]], additional_constraints : list[tuple[str, tuple[str, ...]]] = []) -> list[list[int]] | bool:
   assert len(grid) == 9
@@ -9,7 +20,7 @@ def solve(grid : list[list[int]], additional_constraints : list[tuple[str, tuple
   variables = [f"X{i}{j}" for i in range(1, 10) for j in range(1, 10)]
   sudoku_domain = set( range( 1, 10 ) )
 
-  sudoku_csp = ConstraintSatisfactionProblem(variables, domains = dict( [ ( variable , sudoku_domain) for variable in variables ] ) )
+  sudoku_csp : ConstraintSatisfactionProblem = ConstraintSatisfactionProblem(variables, domains = dict( [ ( variable , sudoku_domain) for variable in variables ] ) )
   for row in range( 9 ):
     assert len(grid[row]) == 9
     assert set(grid[row]).issubset(sudoku_domain.union( {0} ))
@@ -38,6 +49,12 @@ def solve(grid : list[list[int]], additional_constraints : list[tuple[str, tuple
 
 
   # Add aditional constraints
+  for constraint_name, variables in additional_constraints:
+    constraint_name = constraint_name.lower()
+    assert constraint_name in constraint_adding_functions.keys()
+
+    constraint_adding_functions[constraint_name](sudoku_csp, variables)
+
   # try to cut down the domain at start, if found not possible return False to mark there is no solution
   if not ac3( sudoku_csp ): return False
 
@@ -62,6 +79,8 @@ solution = solve(
     [0,0,5,8,0,0,9,6,1],
     [0,0,0,0,3,0,0,0,0],
     [0,0,9,0,0,7,3,0,0],
+  ], [
+    ('kings move', ('X22',))
   ]
 )
 
