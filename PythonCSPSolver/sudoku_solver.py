@@ -68,25 +68,3 @@ def solve(grid : list[list[int]], additional_constraints : list[tuple[str, tuple
       grid[row][col] = assignment[variable]
 
   return grid
-
-solution = solve(
-  [
-    [6,0,0,3,8,0,0,0,2],
-    [0,0,3,0,0,0,0,4,9],
-    [8,0,2,0,5,0,0,0,0],
-    [0,0,6,0,4,5,0,0,3],
-    [1,0,0,0,7,0,0,0,4],
-    [0,4,0,2,9,0,0,0,5],
-    [0,0,5,8,0,0,9,6,1],
-    [0,0,0,0,3,0,0,0,0],
-    [0,0,9,0,0,7,3,0,0],
-  ], [
-
-  ]
-)
-
-if solution != False:
-  for row in solution:
-    print(row)
-else:
-  print("No solution")
