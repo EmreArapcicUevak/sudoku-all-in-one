@@ -15,7 +15,7 @@ def add_arrow_constraint(csp : ConstraintSatisfactionProblem, variables : list[s
   assert len(variables) >= 2
 
   current_temp_var_name = "temp_arrow_0"
-  for i in range(len(variables)):
+  for i in range(len(csp.variables)):
     if current_temp_var_name in csp.variables:
       current_temp_var_name = f"temp_arrow_{i + 1}"
     else:
