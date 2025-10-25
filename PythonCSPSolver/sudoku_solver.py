@@ -12,6 +12,7 @@ constraint_adding_functions = {
   'sudoku x' : add_sudoku_x_constraint,
   'thermo' : add_thermo_constraint,
   'german whisper' : add_german_whisper_constraint,
+  'arrow' : add_arrow_constraint
 }
 
 def solve(grid : list[list[int]], additional_constraints : list[tuple[str, tuple[str, ...]]] = []) -> list[list[int]] | bool:
