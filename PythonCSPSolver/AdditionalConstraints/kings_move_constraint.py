@@ -22,7 +22,7 @@ def compute_affected_variables(var: str):
 
 
 def add_kings_move_constraint(csp: ConstraintSatisfactionProblem, variables: list[ str ]):
-  for var in variables:
+  for var in csp.variables:
     add_alldiff_constraint_as_binary_constraint( csp, compute_affected_variables( var ) )
 
 

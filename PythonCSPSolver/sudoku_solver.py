@@ -80,9 +80,12 @@ solution = solve(
     [0,0,0,0,3,0,0,0,0],
     [0,0,9,0,0,7,3,0,0],
   ], [
-    ('kings move', ('X22',))
+
   ]
 )
 
-for row in solution:
-  print(row)
+if solution != False:
+  for row in solution:
+    print(row)
+else:
+  print("No solution")
