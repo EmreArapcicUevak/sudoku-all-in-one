@@ -6,3 +6,4 @@ from .german_whisper_constraint import *
 from .thermo_constraint import *
 from .sudoku_x_constraint import *
 from .arrow_constraint import *
+from .cage_constraint import *
