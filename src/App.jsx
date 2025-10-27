@@ -2,6 +2,7 @@ import './App.css'
 import Sudoku from "./components/Sudoku.jsx";
 import Keypad from "./components/Keypad.jsx";
 import {useEffect, useState} from "react";
+import testPyodide from "./pyodide.js";
 
 const startArr = Array(81).fill("\u00A0");
 
@@ -40,6 +41,7 @@ function App() {
 
     return (
         <div className="w-screen h-screen overflow-hidden flex justify-center items-center" onClick={() => {setSelectedCell(0)}}>
+            <button className="m-8" onClick={(e) => {e.stopPropagation(); testPyodide()}}>Find solution</button>
             <Sudoku gridContent={gridContent} selectedCell={selectedCell} setSelectedCell={setSelectedCell}/>
             <Keypad keyClicked={keyClicked}/>
         </div>
