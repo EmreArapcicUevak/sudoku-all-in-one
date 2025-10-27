@@ -39,7 +39,7 @@ function App() {
     }, [gridContent, selectedCell]);
 
     return (
-        <div className="w-screen h-screen overflow-hidden flex justify-center items-center" onClick={() => {}}>
+        <div className="w-screen h-screen overflow-hidden flex justify-center items-center" onClick={() => {setSelectedCell(0)}}>
             <Sudoku gridContent={gridContent} selectedCell={selectedCell} setSelectedCell={setSelectedCell}/>
             <Keypad keyClicked={keyClicked}/>
         </div>
