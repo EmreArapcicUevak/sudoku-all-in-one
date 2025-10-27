@@ -2,7 +2,7 @@ import './App.css'
 import Sudoku from "./components/Sudoku.jsx";
 import Keypad from "./components/Keypad.jsx";
 import {useEffect, useState} from "react";
-import testPyodide from "./pyodide.js";
+import {testPyodide, setupPyodideEnvironment} from "./pyodide.js";
 
 const startArr = Array(81).fill("\u00A0");
 
@@ -10,6 +10,7 @@ function App() {
 
     const [selectedCell, setSelectedCell] = useState(0);
     const [gridContent, setGridContent] = useState([...startArr]);
+    const [canRun, setCanRun] = useState(false);
 
     const keyClicked = (kkey) => {
         const arr = [...gridContent];
@@ -39,9 +40,15 @@ function App() {
         return () => window.removeEventListener("keydown", handleKeyDown);
     }, [gridContent, selectedCell]);
 
+    useEffect(() => {
+        setupPyodideEnvironment().then(() => {
+            setCanRun(true);
+        });
+    }, []);
+
     return (
         <div className="w-screen h-screen overflow-hidden flex justify-center items-center" onClick={() => {setSelectedCell(0)}}>
-            <button className="m-8" onClick={(e) => {e.stopPropagation(); testPyodide()}}>Find solution</button>
+            <button className="m-8" onClick={(e) => {e.stopPropagation(); testPyodide()}} disabled={!canRun}>Find solution</button>
             <Sudoku gridContent={gridContent} selectedCell={selectedCell} setSelectedCell={setSelectedCell}/>
             <Keypad keyClicked={keyClicked}/>
         </div>
