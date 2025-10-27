@@ -1,36 +1,7 @@
 import SudokuCell from "./SudokuCell.jsx";
-import {useEffect, useState} from "react";
 
-const startArr = Array(81).fill("\u00A0");
 
-function Sudoku() {
-
-    const [selectedCell, setSelectedCell] = useState(0);
-    const [gridContent, setGridContent] = useState([...startArr]);
-
-    useEffect(() => {
-        const handleKeyDown = (e) => {
-            const allowedKeys = ["Backspace", "Delete"];
-            if (e.key >= "1" && e.key <= "9") {
-                console.log(`Key pressed: ${e.key}`);
-                const arr = [...gridContent];
-                arr[selectedCell - 1] = e.key;
-                setGridContent([...arr]);
-            }
-            else if (allowedKeys.includes(e.key)) {
-                console.log(`Key pressed: ${e.key}`);
-                const arr = [...gridContent];
-                arr[selectedCell - 1] = "\u00A0";
-                setGridContent([...arr]);
-            }
-            else {
-                e.preventDefault();
-            }
-        }
-        window.addEventListener("keydown", handleKeyDown);
-        return () => window.removeEventListener("keydown", handleKeyDown);
-    }, [gridContent, selectedCell]);
-
+function Sudoku({gridContent, selectedCell, setSelectedCell}) {
     return(
         <div className="relative aspect-square h-[90%] p-2">
             <div className="absolute inset-0 grid grid-cols-3 gap-2 top-2 left-2 right-2 bottom-2">
