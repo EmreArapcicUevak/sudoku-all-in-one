@@ -64,11 +64,37 @@ async function setupPyodideEnvironment() {
 
 }
 
+async function solveSudoku(grid) {
+    const slicedGrid = [];
+    for (let i = 0; i < 9; i++) {
+        slicedGrid.push(grid.slice(i * 9, i * 9 + 9));
+    }
+
+    const pyGrid = pyodide.toPy(slicedGrid);
+    pyodide.globals.set("pyGrid", pyGrid);
+    const pyResult = await pyodide.runPythonAsync(`
+        from PythonCSPSolver.sudoku_solver import solve
+        solve(pyGrid, [])
+        `);
+    if (typeof pyResult === "boolean") {
+        console.log(pyResult);
+
+        pyGrid.destroy();
+        return pyResult;
+    }
+
+    const result = pyResult.toJs(pyResult);
+    pyGrid.destroy();
+    console.log(result);
+    return result.flat();
+
+}
+
 async function testPyodide() {
     const pyResult = await pyodide.runPythonAsync(`
     from PythonCSPSolver.sudoku_solver import solve
     solve([
-        [5,3,0,0,7,0,0,0,0],
+        [5,3,0,0,70,0,0,0,],
         [6,0,0,1,9,5,0,0,0],
         [0,9,8,0,0,0,0,6,0],
         [8,0,0,0,6,0,0,0,3],
@@ -83,4 +109,4 @@ async function testPyodide() {
     console.log(text);
 }
 
-export {testPyodide, setupPyodideEnvironment};
+export {testPyodide, setupPyodideEnvironment, solveSudoku};
