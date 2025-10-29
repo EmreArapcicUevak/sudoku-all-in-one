@@ -58,9 +58,7 @@ async function setupPyodideEnvironment() {
     `);
 
 
-    console.log(pyodide.FS.readdir("/PythonCSPSolver"));
-    console.log(pyodide.FS.readdir("/PythonCSPSolver/AdditionalConstraints"));
-    console.log(pyodide.FS.readFile("/PythonCSPSolver/sudoku_solver.py", {encoding: "utf8"}));
+    console.log("Environment loaded");
 
 }
 
@@ -90,23 +88,4 @@ async function solveSudoku(grid) {
 
 }
 
-async function testPyodide() {
-    const pyResult = await pyodide.runPythonAsync(`
-    from PythonCSPSolver.sudoku_solver import solve
-    solve([
-        [5,3,0,0,70,0,0,0,],
-        [6,0,0,1,9,5,0,0,0],
-        [0,9,8,0,0,0,0,6,0],
-        [8,0,0,0,6,0,0,0,3],
-        [4,0,0,8,0,3,0,0,1],
-        [7,0,0,0,2,0,0,0,6],
-        [0,6,0,0,0,0,2,8,0],
-        [0,0,0,4,1,9,0,0,5],
-        [0,0,0,0,8,0,0,7,9]
-    ], [])
-    `)
-    const text = pyResult.toJs();
-    console.log(text);
-}
-
-export {testPyodide, setupPyodideEnvironment, solveSudoku};
+export {setupPyodideEnvironment, solveSudoku};
