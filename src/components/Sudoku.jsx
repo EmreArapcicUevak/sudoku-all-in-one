@@ -35,16 +35,20 @@ function Sudoku({gridContent, selectedCell, setSelectedCell}) {
 
             </div>
             <div className="absolute inset-0 flex justify-between pointer-events-none">
+                <div className="w-2 h-full bg-black pointer-events-none z-20"></div>
                 <div className="w-2 h-full bg-black pointer-events-none"></div>
                 <div className="w-2 h-full bg-black pointer-events-none"></div>
-                <div className="w-2 h-full bg-black pointer-events-none"></div>
-                <div className="w-2 h-full bg-black pointer-events-none"></div>
+                <div className="w-2 h-full bg-black pointer-events-none z-20"></div>
             </div>
             <div className="absolute inset-0 flex justify-between pointer-events-none rotate-90">
+                <div className="w-2 h-full bg-black pointer-events-none z-20"></div>
                 <div className="w-2 h-full bg-black pointer-events-none"></div>
                 <div className="w-2 h-full bg-black pointer-events-none"></div>
-                <div className="w-2 h-full bg-black pointer-events-none"></div>
-                <div className="w-2 h-full bg-black pointer-events-none"></div>
+                <div className="w-2 h-full bg-black pointer-events-none z-20"></div>
+            </div>
+            <div className=" top-2 bottom-2 left-2 right-2 absolute inset-0 flex justify-center items-center pointer-events-none overflow-hidden">
+                <div className="w-1 h-[150%] bg-gray-400 pointer-events-none rotate-45"></div>
+                <div className="w-1 h-[150%] bg-gray-400 pointer-events-none rotate-[135deg]"></div>
             </div>
         </div>
     );

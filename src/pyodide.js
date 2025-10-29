@@ -62,26 +62,30 @@ async function setupPyodideEnvironment() {
 
 }
 
-async function solveSudoku(grid) {
+async function solveSudoku(grid, additionalConstraints) {
     const slicedGrid = [];
     for (let i = 0; i < 9; i++) {
         slicedGrid.push(grid.slice(i * 9, i * 9 + 9));
     }
 
     const pyGrid = pyodide.toPy(slicedGrid);
+    const pyConstraints = pyodide.toPy(additionalConstraints);
     pyodide.globals.set("pyGrid", pyGrid);
+    pyodide.globals.set("additional_constraints", pyConstraints);
     const pyResult = await pyodide.runPythonAsync(`
         from PythonCSPSolver.sudoku_solver import solve
-        solve(pyGrid, [])
+        solve(pyGrid, additional_constraints)
         `);
     if (typeof pyResult === "boolean") {
         console.log(pyResult);
 
+        pyConstraints.destroy();
         pyGrid.destroy();
         return pyResult;
     }
 
     const result = pyResult.toJs(pyResult);
+    pyConstraints.destroy();
     pyGrid.destroy();
     console.log(result);
     return result.flat();

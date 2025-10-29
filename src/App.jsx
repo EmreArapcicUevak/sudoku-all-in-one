@@ -92,7 +92,27 @@ function App() {
     }, []);
 
     async function solve() {
-        const result = await solveSudoku(gridContent);
+        const additionalConstraints = [];
+
+        appliedRules.forEach(rule => {
+            if (!rule.added || rule.name === rules[0].name) return;
+
+            switch (rule.name) {
+                case "King's Move":
+                    additionalConstraints.push(["kings move", []]);
+                    break;
+                case "Knight's Move":
+                    additionalConstraints.push(["knights move", []]);
+                    break;
+                case "Sudoku X":
+                    additionalConstraints.push(["sudoku x", []]);
+                    break;
+                default:
+                    console.log(`${rule.name} not implemented!!!`)
+            }
+        });
+        console.log(additionalConstraints);
+        const result = await solveSudoku(gridContent, additionalConstraints);
         if (typeof result === "boolean") {
             alert("Solution for this sudoku does not exist")
             return;
