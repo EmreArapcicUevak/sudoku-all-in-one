@@ -132,7 +132,8 @@ function App() {
                                        onRuleClicked={onRuleClicked}
                                        appliedRules={appliedRules}
                                        addRule={addRule} removeRule={removeRule}/>
-                        <Sudoku gridContent={gridContent} selectedCell={selectedCell} setSelectedCell={setSelectedCell}/>
+                        <Sudoku gridContent={gridContent} selectedCell={selectedCell} setSelectedCell={setSelectedCell}
+                        showDiagonals={appliedRules[3].added}/>
                         <Keypad keyClicked={keyClicked}/>
                     </>
                 )
