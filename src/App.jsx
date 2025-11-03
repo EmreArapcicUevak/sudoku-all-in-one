@@ -4,21 +4,20 @@ import Keypad from "./components/Keypad.jsx";
 import {useEffect, useState} from "react";
 import {setupPyodideEnvironment, solveSudoku} from "./pyodide.js";
 import RuleContainer from "./components/RuleContainer.jsx";
+import {sudokuContext} from "./sudokuContext.js";
 
 const startArr = Array(81).fill(0);
 
-const rules = [
-    {name: "Normal Sudoku", added: true},
-    {name: "King's Move", added: false},
-    {name: "Knight's Move", added: false},
-    {name: "Sudoku X", added: false},
-    {name: "Arrow Sudoku", added: false},
-    {name: "Kropki Dot 2:1", added: false},
-    {name: "Kropki Dot Consecutive", added: false},
-    {name: "Killer Cage", added: false},
-    {name: "German Whisper", added: false},
-    {name: "Thermo Sudoku", added: false},
-];
+const rules = [{name: "Normal Sudoku", added: true}, {name: "King's Move", added: false}, {
+    name: "Knight's Move",
+    added: false
+}, {name: "Sudoku X", added: false}, {name: "Arrow Sudoku", added: false}, {
+    name: "Kropki Dot 2:1",
+    added: false
+}, {name: "Kropki Dot Consecutive", added: false}, {name: "Killer Cage", added: false}, {
+    name: "German Whisper",
+    added: false
+}, {name: "Thermo Sudoku", added: false},];
 
 function App() {
 
@@ -29,14 +28,17 @@ function App() {
     const [appliedRules, setAppliedRules] = useState(rules);
     const [isLoading, setIsLoading] = useState(true);
 
+    const _setSelectedRule = sudokuContext(state => state.setSelectedRule);
+    const {setKropkiDotsW, setKropkiDotsB, kropkiDotsB, kropkiDotsW} = sudokuContext();
+
     const keyClicked = (kkey) => {
         const arr = [...gridContent];
-        if (kkey !== "Erase") arr[selectedCell - 1] = parseInt(kkey);
-        else arr[selectedCell - 1] = 0;
+        if (kkey !== "Erase") arr[selectedCell - 1] = parseInt(kkey); else arr[selectedCell - 1] = 0;
         setGridContent([...arr]);
     }
 
     const onRuleClicked = (ruleName) => {
+        _setSelectedRule(ruleName);
         setSelectedRule(ruleName);
     };
 
@@ -60,6 +62,18 @@ function App() {
                 break;
             }
         }
+
+        switch (ruleName) {
+            case "Kropki Dot 2:1":
+                setKropkiDotsB([]);
+                break;
+            case "Kropki Dot Consecutive":
+                setKropkiDotsW([]);
+                break;
+            default:
+                break;
+        }
+
         setAppliedRules([...r]);
     };
 
@@ -107,6 +121,32 @@ function App() {
                 case "Sudoku X":
                     additionalConstraints.push(["sudoku x", []]);
                     break;
+                case "Kropki Dot 2:1":
+                    kropkiDotsB.forEach(dot => {
+                        if (dot <= 72) {
+                            const row = Math.floor(dot / 8) + 1;
+                            const col = (dot % 8) + 1;
+                            additionalConstraints.push(["black dot", [`X${row}${col}`, `X${row}${col + 1}`]])
+                        } else {
+                            const row = ((dot - 72) % 8) + 1;
+                            const col = Math.floor((dot - 72) / 8) + 1;
+                            additionalConstraints.push(["black dot", [`X${row}${col}`, `X${row + 1}${col}`]])
+                        }
+                    });
+                    break;
+                case "Kropki Dot Consecutive":
+                    kropkiDotsW.forEach(dot => {
+                        if (dot <= 72) {
+                            const row = Math.floor(dot / 8) + 1;
+                            const col = (dot % 8) + 1;
+                            additionalConstraints.push(["white dot", [`X${row}${col}`, `X${row}${col + 1}`]])
+                        } else {
+                            const row = ((dot - 72) % 8) + 1;
+                            const col = Math.floor((dot - 72) / 8) + 1;
+                            additionalConstraints.push(["white dot", [`X${row}${col}`, `X${row + 1}${col}`]])
+                        }
+                    });
+                    break;
                 default:
                     console.log(`${rule.name} not implemented!!!`)
             }
@@ -120,31 +160,22 @@ function App() {
         setGridContent([...result]);
     }
 
-    return (
-        <div
-            className={`w-screen h-screen overflow-hidden flex ${isLoading ? "justify-center" : "justify-between"} items-center`}
-            onClick={() => {
-                setSelectedCell(0)
-            }}>
-            {
-                !isLoading && (<>
-                        <RuleContainer solve={solve} canRun={canRun} selectedRule={selectedRule}
-                                       onRuleClicked={onRuleClicked}
-                                       appliedRules={appliedRules}
-                                       addRule={addRule} removeRule={removeRule}/>
-                        <Sudoku gridContent={gridContent} selectedCell={selectedCell} setSelectedCell={setSelectedCell}
-                        showDiagonals={appliedRules[3].added}/>
-                        <Keypad keyClicked={keyClicked}/>
-                    </>
-                )
-            }
-            {
-                isLoading && (
-                    <span className="text-6xl text-white font-semibold">Loading ...</span>
-                )
-            }
-        </div>
-    )
+    return (<div
+        className={`w-screen h-screen overflow-hidden flex ${isLoading ? "justify-center" : "justify-between"} items-center`}
+        onClick={() => {
+            setSelectedCell(0)
+        }}>
+        {!isLoading && (<>
+            <RuleContainer solve={solve} canRun={canRun} selectedRule={selectedRule}
+                           onRuleClicked={onRuleClicked}
+                           appliedRules={appliedRules}
+                           addRule={addRule} removeRule={removeRule}/>
+            <Sudoku gridContent={gridContent} selectedCell={selectedCell} setSelectedCell={setSelectedCell}
+                    showDiagonals={appliedRules[3].added}/>
+            <Keypad keyClicked={keyClicked}/>
+        </>)}
+        {isLoading && (<span className="text-6xl text-white font-semibold">Loading ...</span>)}
+    </div>)
 }
 
 export default App

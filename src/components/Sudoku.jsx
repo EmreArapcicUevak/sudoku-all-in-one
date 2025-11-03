@@ -1,12 +1,25 @@
 import SudokuCell from "./SudokuCell.jsx";
+import KropkiDot from "./KropkiDot.jsx";
+import React, {useRef, useState} from "react";
+import {sudokuContext} from "../sudokuContext.js";
 
 
 function Sudoku({gridContent, selectedCell, setSelectedCell, showDiagonals}) {
+
+    const cellRef = useRef(null);
+    const [cellWidth, setCellWidth] = useState(0);
+
+    const {selectedRule} = sudokuContext();
+
+    React.useEffect(() => {
+        setCellWidth(cellRef.current.getBoundingClientRect().width)
+    }, [])
+
     return(
         <div className="relative aspect-square h-[90%] p-2">
             <div className="absolute inset-0 grid grid-cols-3 gap-2 top-2 left-2 right-2 bottom-2">
                 <div className="grid grid-cols-3 gap-0.5 bg-gray-400">
-                    <SudokuCell gridContent={gridContent} selectedCell={selectedCell} onClick={setSelectedCell} id={1}/><SudokuCell gridContent={gridContent} selectedCell={selectedCell} onClick={setSelectedCell} id={2}/><SudokuCell gridContent={gridContent} selectedCell={selectedCell} onClick={setSelectedCell} id={3}/><SudokuCell gridContent={gridContent} selectedCell={selectedCell} onClick={setSelectedCell} id={10}/><SudokuCell gridContent={gridContent} selectedCell={selectedCell} onClick={setSelectedCell} id={11}/><SudokuCell gridContent={gridContent} selectedCell={selectedCell} onClick={setSelectedCell} id={12}/><SudokuCell gridContent={gridContent} selectedCell={selectedCell} onClick={setSelectedCell} id={19}/><SudokuCell gridContent={gridContent} selectedCell={selectedCell} onClick={setSelectedCell} id={20}/><SudokuCell gridContent={gridContent} selectedCell={selectedCell} onClick={setSelectedCell} id={21}/>
+                    <SudokuCell ref={cellRef} gridContent={gridContent} selectedCell={selectedCell} onClick={setSelectedCell} id={1}/><SudokuCell gridContent={gridContent} selectedCell={selectedCell} onClick={setSelectedCell} id={2}/><SudokuCell gridContent={gridContent} selectedCell={selectedCell} onClick={setSelectedCell} id={3}/><SudokuCell gridContent={gridContent} selectedCell={selectedCell} onClick={setSelectedCell} id={10}/><SudokuCell gridContent={gridContent} selectedCell={selectedCell} onClick={setSelectedCell} id={11}/><SudokuCell gridContent={gridContent} selectedCell={selectedCell} onClick={setSelectedCell} id={12}/><SudokuCell gridContent={gridContent} selectedCell={selectedCell} onClick={setSelectedCell} id={19}/><SudokuCell gridContent={gridContent} selectedCell={selectedCell} onClick={setSelectedCell} id={20}/><SudokuCell gridContent={gridContent} selectedCell={selectedCell} onClick={setSelectedCell} id={21}/>
                 </div>
                 <div className="grid grid-cols-3 gap-0.5 bg-gray-400">
                     <SudokuCell gridContent={gridContent} selectedCell={selectedCell} onClick={setSelectedCell} id={4}/><SudokuCell gridContent={gridContent} selectedCell={selectedCell} onClick={setSelectedCell} id={5}/><SudokuCell gridContent={gridContent} selectedCell={selectedCell} onClick={setSelectedCell} id={6}/><SudokuCell gridContent={gridContent} selectedCell={selectedCell} onClick={setSelectedCell} id={13}/><SudokuCell gridContent={gridContent} selectedCell={selectedCell} onClick={setSelectedCell} id={14}/><SudokuCell gridContent={gridContent} selectedCell={selectedCell} onClick={setSelectedCell} id={15}/><SudokuCell gridContent={gridContent} selectedCell={selectedCell} onClick={setSelectedCell} id={22}/><SudokuCell gridContent={gridContent} selectedCell={selectedCell} onClick={setSelectedCell} id={23}/><SudokuCell gridContent={gridContent} selectedCell={selectedCell} onClick={setSelectedCell} id={24}/>
@@ -50,9 +63,71 @@ function Sudoku({gridContent, selectedCell, setSelectedCell, showDiagonals}) {
                 <div className="w-1 h-[150%] bg-gray-400 pointer-events-none rotate-45"></div>
                 <div className="w-1 h-[150%] bg-gray-400 pointer-events-none rotate-[135deg]"></div>
             </div>
+            <div className={`absolute inset-0 top-2 bottom-2 left-2 right-2 flex flex-col justify-start z-20 pointer-events-none`}>
+                <KropkiRow cellWidth={cellWidth} row={1}/>
+                <div className={`h-0.5`}></div>
+                <KropkiRow cellWidth={cellWidth} row={2}/>
+                <div className={`h-0.5`}></div>
+                <KropkiRow cellWidth={cellWidth} row={3}/>
+                <div className={`h-2`}></div>
+                <KropkiRow cellWidth={cellWidth} row={4}/>
+                <div className={`h-0.5`}></div>
+                <KropkiRow cellWidth={cellWidth} row={5}/>
+                <div className={`h-0.5`}></div>
+                <KropkiRow cellWidth={cellWidth} row={6}/>
+                <div className={`h-2`}></div>
+                <KropkiRow cellWidth={cellWidth} row={7}/>
+                <div className={`h-0.5`}></div>
+                <KropkiRow cellWidth={cellWidth} row={8}/>
+                <div className={`h-0.5`}></div>
+                <KropkiRow cellWidth={cellWidth} row={9}/>
+            </div>
+            <div className={`absolute inset-0 top-2 bottom-2 left-2 right-2 flex flex-col justify-start rotate-90 scale-y-[-1] z-20 pointer-events-none`}>
+                <KropkiRow cellWidth={cellWidth} row={10}/>
+                <div className={`h-0.5`}></div>
+                <KropkiRow cellWidth={cellWidth} row={11}/>
+                <div className={`h-0.5`}></div>
+                <KropkiRow cellWidth={cellWidth} row={12}/>
+                <div className={`h-2`}></div>
+                <KropkiRow cellWidth={cellWidth} row={13}/>
+                <div className={`h-0.5`}></div>
+                <KropkiRow cellWidth={cellWidth} row={14}/>
+                <div className={`h-0.5`}></div>
+                <KropkiRow cellWidth={cellWidth} row={15}/>
+                <div className={`h-2`}></div>
+                <KropkiRow cellWidth={cellWidth} row={16}/>
+                <div className={`h-0.5`}></div>
+                <KropkiRow cellWidth={cellWidth} row={17}/>
+                <div className={`h-0.5`}></div>
+                <KropkiRow cellWidth={cellWidth} row={18}/>
+            </div>
         </div>
     );
 
+}
+
+function KropkiRow({cellWidth, row}) {
+    return(
+        <div style={{display: "flex", justifyContent: "start", alignItems: "center", height: `${cellWidth}px`}}>
+            <div style={{ width: `${cellWidth - 11}px` }}></div>
+            <KropkiDot pos={(row - 1) * 8}/>
+            <div style={{ width: `${cellWidth - 22}px` }}></div>
+            <KropkiDot pos={(row - 1) * 8 + 1}/>
+            <div style={{ width: `${cellWidth - 19}px` }}></div>
+            <KropkiDot pos={(row - 1) * 8 + 2}/>
+            <div style={{ width: `${cellWidth - 19}px` }}></div>
+            <KropkiDot pos={(row - 1) * 8 + 3}/>
+            <div style={{ width: `${cellWidth - 22}px` }}></div>
+            <KropkiDot pos={(row - 1) * 8 + 4}/>
+            <div style={{ width: `${cellWidth - 19}px` }}></div>
+            <KropkiDot pos={(row - 1) * 8 + 5}/>
+            <div style={{ width: `${cellWidth - 19}px` }}></div>
+            <KropkiDot pos={(row - 1) * 8 + 6}/>
+            <div style={{ width: `${cellWidth - 22}px` }}></div>
+            <KropkiDot pos={(row - 1) * 8 + 7}/>
+            <div style={{ width: `${cellWidth - 11}px` }}></div>
+        </div>
+    );
 }
 
 export default Sudoku;
