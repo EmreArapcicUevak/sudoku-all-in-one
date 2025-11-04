@@ -2,21 +2,26 @@ import SudokuCell from "./SudokuCell.jsx";
 import KropkiDot from "./KropkiDot.jsx";
 import React, {useRef, useState} from "react";
 import {sudokuContext} from "../sudokuContext.js";
+import Canvas from "./Canvas.jsx";
 
 
 function Sudoku({gridContent, selectedCell, setSelectedCell, showDiagonals}) {
 
     const cellRef = useRef(null);
+    const sudokuRef = useRef(null);
     const [cellWidth, setCellWidth] = useState(0);
 
-    const {selectedRule} = sudokuContext();
+    const {setCanvasHeight, setCanvasWidth, canvasHeight, canvasWidth, setCanvasDrawInstructions} = sudokuContext();
 
     React.useEffect(() => {
         setCellWidth(cellRef.current.getBoundingClientRect().width)
+        setCanvasHeight(sudokuRef.current.getBoundingClientRect().height);
+        setCanvasWidth(sudokuRef.current.getBoundingClientRect().width);
+        setCanvasDrawInstructions(["test"]);
     }, [])
 
     return(
-        <div className="relative aspect-square h-[90%] p-2">
+        <div ref={sudokuRef} className="relative aspect-square h-[90%] p-2">
             <div className="absolute inset-0 grid grid-cols-3 gap-2 top-2 left-2 right-2 bottom-2">
                 <div className="grid grid-cols-3 gap-0.5 bg-gray-400">
                     <SudokuCell ref={cellRef} gridContent={gridContent} selectedCell={selectedCell} onClick={setSelectedCell} id={1}/><SudokuCell gridContent={gridContent} selectedCell={selectedCell} onClick={setSelectedCell} id={2}/><SudokuCell gridContent={gridContent} selectedCell={selectedCell} onClick={setSelectedCell} id={3}/><SudokuCell gridContent={gridContent} selectedCell={selectedCell} onClick={setSelectedCell} id={10}/><SudokuCell gridContent={gridContent} selectedCell={selectedCell} onClick={setSelectedCell} id={11}/><SudokuCell gridContent={gridContent} selectedCell={selectedCell} onClick={setSelectedCell} id={12}/><SudokuCell gridContent={gridContent} selectedCell={selectedCell} onClick={setSelectedCell} id={19}/><SudokuCell gridContent={gridContent} selectedCell={selectedCell} onClick={setSelectedCell} id={20}/><SudokuCell gridContent={gridContent} selectedCell={selectedCell} onClick={setSelectedCell} id={21}/>
@@ -47,6 +52,7 @@ function Sudoku({gridContent, selectedCell, setSelectedCell, showDiagonals}) {
                 </div>
 
             </div>
+            <Canvas width={canvasWidth} height={canvasHeight}/>
             <div className="absolute inset-0 flex justify-between pointer-events-none">
                 <div className="w-2 h-full bg-black pointer-events-none z-20"></div>
                 <div className="w-2 h-full bg-black pointer-events-none"></div>

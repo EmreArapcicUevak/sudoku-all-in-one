@@ -5,6 +5,7 @@ import {useEffect, useState} from "react";
 import {setupPyodideEnvironment, solveSudoku} from "./pyodide.js";
 import RuleContainer from "./components/RuleContainer.jsx";
 import {sudokuContext} from "./sudokuContext.js";
+import CellSelector from "./components/CellSelector.jsx";
 
 const startArr = Array(81).fill(0);
 
@@ -175,6 +176,7 @@ function App() {
             <Keypad keyClicked={keyClicked}/>
         </>)}
         {isLoading && (<span className="text-6xl text-white font-semibold">Loading ...</span>)}
+        {/*<CellSelector/>*/}
     </div>)
 }
 
