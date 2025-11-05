@@ -4,11 +4,14 @@ export const sudokuContext = create((set) => ({
     selectedRule: "Normal Sudoku",
     kropkiDotsW: [],
     kropkiDotsB: [],
-    selectorSelectedCells: Array(81).fill(false),
+    selectorSelectedCells: [],
     canvasWidth: 0,
     canvasHeight: 0,
     canvasContext: null,
     canvasDrawInstructions: [],
+    tempCanvasDrawInstructions: [],
+    cellSize: -1,
+    sudokuPosition: [0, 0],
 
 
     setSelectedRule: (value) => set({selectedRule: value}),
@@ -19,4 +22,7 @@ export const sudokuContext = create((set) => ({
     setCanvasHeight: (value) => set({canvasHeight: value}),
     setCanvasContext: (value) => set({canvasContext: value}),
     setCanvasDrawInstructions: (value) => set({canvasDrawInstructions: value}),
+    setTempCanvasDrawInstructions: (value) => set({tempCanvasDrawInstructions: value}),
+    setCellSize: value => set({cellSize: value}),
+    setSudokuPosition: value => set({sudokuPosition: value}),
 }));

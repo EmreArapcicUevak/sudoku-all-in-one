@@ -28,9 +28,10 @@ function App() {
     const [selectedRule, setSelectedRule] = useState("Normal Sudoku");
     const [appliedRules, setAppliedRules] = useState(rules);
     const [isLoading, setIsLoading] = useState(true);
+    const [showCellSelector, setShowCellSelector] = useState(false);
 
     const _setSelectedRule = sudokuContext(state => state.setSelectedRule);
-    const {setKropkiDotsW, setKropkiDotsB, kropkiDotsB, kropkiDotsW} = sudokuContext();
+    const {setKropkiDotsW, setKropkiDotsB, kropkiDotsB, kropkiDotsW, canvasDrawInstructions, setCanvasDrawInstructions} = sudokuContext();
 
     const keyClicked = (kkey) => {
         const arr = [...gridContent];
@@ -74,6 +75,10 @@ function App() {
             default:
                 break;
         }
+
+        let CDI = [...canvasDrawInstructions];
+        CDI = CDI.filter(it => it.type !== ruleName);
+        setCanvasDrawInstructions([...CDI]);
 
         setAppliedRules([...r]);
     };
@@ -148,6 +153,18 @@ function App() {
                         }
                     });
                     break;
+                case "German Whisper":
+                    canvasDrawInstructions.forEach(item => {
+                       if (item.type === "German Whisper") {
+                           const cells = item.cells.map(it => {
+                               const xNum = Math.floor((it - 1) / 9) + 1;
+                               const yNum = (it - 1) % 9 + 1;
+                               return `X${xNum}${yNum}`;
+                           });
+                           additionalConstraints.push(["german whisper", [...cells]]);
+                       }
+                    });
+                    break;
                 default:
                     console.log(`${rule.name} not implemented!!!`)
             }
@@ -170,13 +187,13 @@ function App() {
             <RuleContainer solve={solve} canRun={canRun} selectedRule={selectedRule}
                            onRuleClicked={onRuleClicked}
                            appliedRules={appliedRules}
-                           addRule={addRule} removeRule={removeRule}/>
+                           addRule={addRule} removeRule={removeRule} setShowCellSelector={setShowCellSelector}/>
             <Sudoku gridContent={gridContent} selectedCell={selectedCell} setSelectedCell={setSelectedCell}
                     showDiagonals={appliedRules[3].added}/>
             <Keypad keyClicked={keyClicked}/>
         </>)}
         {isLoading && (<span className="text-6xl text-white font-semibold">Loading ...</span>)}
-        {/*<CellSelector/>*/}
+        {showCellSelector && <CellSelector setShowCellSelector={setShowCellSelector}/>};
     </div>)
 }
 

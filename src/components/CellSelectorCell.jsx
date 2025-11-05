@@ -1,13 +1,52 @@
 import {sudokuContext} from "../sudokuContext.js";
 
 export default function CellSelectorCell({pos}) {
-    const {selectorSelectedCells, setSelectorSelectedCells} = sudokuContext();
+    const {selectorSelectedCells, setSelectorSelectedCells, canvasDrawInstructions, setCanvasDrawInstructions, selectedRule} = sudokuContext();
     return(
-        <div className={`${selectorSelectedCells[pos - 1] ? "" : "bg-gray-900/50"}`} onClick={(e) => {
+        <div className={``} onClick={(e) => {
             e.stopPropagation();
-            const arr = [...selectorSelectedCells];
-            arr[pos - 1] = !arr[pos - 1];
-            setSelectorSelectedCells([...arr]);
+
+            if (selectedRule === "German Whisper") {
+                if (selectorSelectedCells.length === 0) {
+                    setSelectorSelectedCells([pos]);
+
+                    const CDI = [...canvasDrawInstructions];
+                    CDI.push({
+                        type: selectedRule,
+                        cells: [pos]
+                    });
+                    setCanvasDrawInstructions([...CDI]);
+                    return;
+                }
+
+                if (selectorSelectedCells[selectorSelectedCells.length - 1] === pos) {
+                    const arr = [...selectorSelectedCells];
+                    arr.pop();
+                    setSelectorSelectedCells([...arr]);
+
+                    const CDI = [...canvasDrawInstructions];
+                    if (CDI[CDI.length - 1].cells.length <= 1) CDI.pop();
+                    else CDI[CDI.length - 1].cells.pop();
+                    setCanvasDrawInstructions([...CDI]);
+
+                    return;
+                }
+
+
+                const lastPos = selectorSelectedCells[selectorSelectedCells.length - 1];
+                if (lastPos + 1 === pos || lastPos - 1 === pos || lastPos + 9 === pos || lastPos - 9 === pos  ||
+                    lastPos - 9 - 1 === pos || lastPos - 9 + 1 === pos || lastPos + 9 - 1 === pos || lastPos + 9 + 1 === pos) {
+                    const arr = [...selectorSelectedCells];
+                    arr.push(pos);
+                    setSelectorSelectedCells([...arr]);
+
+                    const CDI = [...canvasDrawInstructions];
+                    CDI[CDI.length - 1].cells = [...CDI[CDI.length - 1].cells, pos];
+                    setCanvasDrawInstructions([...CDI]);
+                }
+
+                return;
+            }
         }}></div>
     );
 }

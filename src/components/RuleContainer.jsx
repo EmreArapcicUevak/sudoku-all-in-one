@@ -1,7 +1,7 @@
 import RuleItem from "./RuleItem.jsx";
 import RuleDropdown from "./RuleDropdown.jsx";
 
-function RuleContainer({solve, canRun, selectedRule, onRuleClicked, appliedRules, addRule, removeRule}) {
+function RuleContainer({solve, canRun, selectedRule, onRuleClicked, appliedRules, addRule, removeRule, setShowCellSelector}) {
     return(
         <div className="m-16 self-start">
             <div className="flex justify-center items-center">
@@ -14,7 +14,7 @@ function RuleContainer({solve, canRun, selectedRule, onRuleClicked, appliedRules
                 {
                     appliedRules.filter(rule => rule.added === true).map(rule => {
                         return(
-                            <RuleItem name={rule.name} isRemovable={rule.name !== appliedRules[0].name} selectedRule={selectedRule} onRuleClicked={onRuleClicked} onDeleteRule={removeRule}/>
+                            <RuleItem name={rule.name} isRemovable={rule.name !== appliedRules[0].name} selectedRule={selectedRule} onRuleClicked={onRuleClicked} onDeleteRule={removeRule} setShowCellSelector={setShowCellSelector}/>
                         );
                     })
                 }

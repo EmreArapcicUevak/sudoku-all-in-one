@@ -1,6 +1,6 @@
 import SudokuCell from "./SudokuCell.jsx";
 import KropkiDot from "./KropkiDot.jsx";
-import React, {useRef, useState} from "react";
+import React, {useRef, useState, useEffect} from "react";
 import {sudokuContext} from "../sudokuContext.js";
 import Canvas from "./Canvas.jsx";
 
@@ -11,14 +11,25 @@ function Sudoku({gridContent, selectedCell, setSelectedCell, showDiagonals}) {
     const sudokuRef = useRef(null);
     const [cellWidth, setCellWidth] = useState(0);
 
-    const {setCanvasHeight, setCanvasWidth, canvasHeight, canvasWidth, setCanvasDrawInstructions} = sudokuContext();
+    const {setCanvasHeight, setCanvasWidth, canvasHeight, canvasWidth,
+        setCanvasDrawInstructions, setCellSize, setSudokuPosition} = sudokuContext();
 
-    React.useEffect(() => {
-        setCellWidth(cellRef.current.getBoundingClientRect().width)
+    useEffect(() => {
+        setCellWidth(cellRef.current.getBoundingClientRect().width);
+        setCellSize(cellRef.current.getBoundingClientRect().width);
         setCanvasHeight(sudokuRef.current.getBoundingClientRect().height);
         setCanvasWidth(sudokuRef.current.getBoundingClientRect().width);
-        setCanvasDrawInstructions(["test"]);
-    }, [])
+        const onResize = () => {
+            setSudokuPosition([sudokuRef.current.getBoundingClientRect().x, sudokuRef.current.getBoundingClientRect().y]);
+        }
+        onResize();
+        window.addEventListener("resize", onResize);
+
+        return () => {
+            window.removeEventListener("resize", onResize);
+        }
+    }, []);
+
 
     return(
         <div ref={sudokuRef} className="relative aspect-square h-[90%] p-2">
@@ -52,7 +63,6 @@ function Sudoku({gridContent, selectedCell, setSelectedCell, showDiagonals}) {
                 </div>
 
             </div>
-            <Canvas width={canvasWidth} height={canvasHeight}/>
             <div className="absolute inset-0 flex justify-between pointer-events-none">
                 <div className="w-2 h-full bg-black pointer-events-none z-20"></div>
                 <div className="w-2 h-full bg-black pointer-events-none"></div>
@@ -69,6 +79,7 @@ function Sudoku({gridContent, selectedCell, setSelectedCell, showDiagonals}) {
                 <div className="w-1 h-[150%] bg-gray-400 pointer-events-none rotate-45"></div>
                 <div className="w-1 h-[150%] bg-gray-400 pointer-events-none rotate-[135deg]"></div>
             </div>
+            <Canvas width={canvasWidth} height={canvasHeight}/>
             <div className={`absolute inset-0 top-2 bottom-2 left-2 right-2 flex flex-col justify-start z-20 pointer-events-none`}>
                 <KropkiRow cellWidth={cellWidth} row={1}/>
                 <div className={`h-0.5`}></div>
