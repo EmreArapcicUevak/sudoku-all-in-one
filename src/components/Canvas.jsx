@@ -18,7 +18,7 @@ function Canvas(props) {
         drawCanvas(canvasDrawInstructions, cellSize);
     }, [canvasDrawInstructions]);
 
-    return(<canvas className={`absolute inset-0 pointer-events-none`} ref={canvasRef} {...props}></canvas>);
+    return (<canvas className={`absolute inset-0 pointer-events-none`} ref={canvasRef} {...props}></canvas>);
 }
 
 
@@ -32,7 +32,7 @@ function drawCanvas(canvasDrawInstructions, cellSize) {
                 drawThermoSudoku(drawInstruction, cellSize, 20);
                 break;
             case "Arrow Sudoku":
-                drawArrowSudoku(drawInstruction, cellSize, 6);
+                drawArrowSudoku(drawInstruction, cellSize, 4, 12, Math.PI * 0.20);
                 break;
             default:
                 break;
@@ -78,10 +78,7 @@ function drawThermoSudoku(drawInstruction, cellSize, lineWidth) {
         const [x, y] = getCellPosition(drawInstruction.cells[i], cellSize);
 
         if (i === 0) {
-            canvasContext.arc(y + cellSize / 2 + lineWidth / 2,
-                x + cellSize / 2 + lineWidth / 2,
-                cellSize * 0.25, 0, Math.PI * 2, false
-            );
+            canvasContext.arc(y + cellSize / 2 + lineWidth / 2, x + cellSize / 2 + lineWidth / 2, cellSize * 0.25, 0, Math.PI * 2, false);
             canvasContext.fillStyle = "#d3d3d3";
             canvasContext.fill();
             canvasContext.moveTo(y + cellSize / 2 + lineWidth / 2, x + cellSize / 2 + lineWidth / 2);
@@ -94,7 +91,7 @@ function drawThermoSudoku(drawInstruction, cellSize, lineWidth) {
     canvasContext.stroke();
 }
 
-function drawArrowSudoku(drawInstruction, cellSize, lineWidth) {
+function drawArrowSudoku(drawInstruction, cellSize, lineWidth, headLength, headAngle) {
     if (drawInstruction.cells === 1) return;
 
     canvasContext.lineWidth = lineWidth;
@@ -108,11 +105,8 @@ function drawArrowSudoku(drawInstruction, cellSize, lineWidth) {
         const [x, y] = getCellPosition(drawInstruction.cells[i], cellSize);
 
         if (i === 0) {
-            canvasContext.arc(y + cellSize / 2 + lineWidth / 2,
-                x + cellSize / 2 + lineWidth / 2,
-                cellSize * 0.25, 0, Math.PI * 2, false
-            );
-            canvasContext.fillStyle = "#ffffff";
+            canvasContext.arc(y + cellSize / 2 + lineWidth / 2, x + cellSize / 2 + lineWidth / 2, cellSize * 0.3, 0, Math.PI * 2, false);
+            canvasContext.fillStyle = "#d3d3d3";
             canvasContext.fill();
             canvasContext.moveTo(y + cellSize / 2 + lineWidth / 2, x + cellSize / 2 + lineWidth / 2);
             continue;
@@ -121,7 +115,39 @@ function drawArrowSudoku(drawInstruction, cellSize, lineWidth) {
         canvasContext.lineTo(y + cellSize / 2 + lineWidth / 2, x + cellSize / 2 + lineWidth / 2);
     }
 
+    // circle
     canvasContext.stroke();
+    canvasContext.beginPath();
+    const [x, y] = getCellPosition(drawInstruction.cells[0], cellSize);
+    canvasContext.arc(y + cellSize / 2 + lineWidth / 2, x + cellSize / 2 + lineWidth / 2, cellSize * 0.28, 0, Math.PI * 2, false);
+    canvasContext.fillStyle = "#fff";
+    canvasContext.fill();
+
+    // arrow head
+    const [xFromCell, yFromCell] = getCellPosition(drawInstruction.cells[drawInstruction.cells.length - 2], cellSize);
+    const [xToCell, yToCell] = getCellPosition(drawInstruction.cells[drawInstruction.cells.length - 1], cellSize);
+
+    // Convert to cell centers
+    const fromX = yFromCell + cellSize / 2;
+    const fromY = xFromCell + cellSize / 2;
+    const toX = yToCell + cellSize / 2;
+    const toY = xToCell + cellSize / 2;
+
+    const angle = Math.atan2(toY - fromY, toX - fromX);
+
+    const x1 = toX - headLength * Math.cos(angle - headAngle);
+    const y1 = toY - headLength * Math.sin(angle - headAngle);
+
+    const x2 = toX - headLength * Math.cos(angle + headAngle);
+    const y2 = toY - headLength * Math.sin(angle + headAngle);
+
+    canvasContext.beginPath();
+    canvasContext.moveTo(toX + lineWidth / 2, toY + lineWidth / 2);
+    canvasContext.lineTo(x1 + lineWidth / 2, y1 + lineWidth / 2);
+    canvasContext.moveTo(toX + lineWidth / 2, toY + lineWidth / 2);
+    canvasContext.lineTo(x2 + lineWidth / 2, y2 + lineWidth / 2);
+    canvasContext.stroke();
+
 }
 
 function getCellPosition(cellNum, cellSize) {
@@ -133,12 +159,12 @@ function getCellPosition(cellNum, cellSize) {
     bigGapAmount = Math.floor(xNum / 3);
     smallGapAmount = xNum - bigGapAmount;
 
-    x = xNum * cellSize + bigGapAmount * largeGap + smallGapAmount * smallGap;
+    x = xNum * cellSize + bigGapAmount * largeGap + smallGapAmount * smallGap + 8;
 
     bigGapAmount = Math.floor(yNum / 3);
     smallGapAmount = yNum - bigGapAmount;
 
-    y = yNum * cellSize + bigGapAmount * largeGap + smallGapAmount * smallGap;
+    y = yNum * cellSize + bigGapAmount * largeGap + smallGapAmount * smallGap + 8;
 
     return [x, y];
 }

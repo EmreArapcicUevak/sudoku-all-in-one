@@ -35,6 +35,10 @@ export default function CellSelectorCell({pos}) {
                 if (selectorSelectedCells.includes(pos) || selectorSelectedCells.length >= 9) return;
             }
 
+            if (selectedRule === "Arrow Sudoku") {
+                if (selectorSelectedCells.includes(pos)) return;
+            }
+
             const lastPos = selectorSelectedCells[selectorSelectedCells.length - 1];
             if (lastPos + 1 === pos || lastPos - 1 === pos || lastPos + 9 === pos || lastPos - 9 === pos  ||
                 lastPos - 9 - 1 === pos || lastPos - 9 + 1 === pos || lastPos + 9 - 1 === pos || lastPos + 9 + 1 === pos) {

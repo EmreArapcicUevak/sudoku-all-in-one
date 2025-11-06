@@ -24,7 +24,6 @@ function Sudoku({gridContent, selectedCell, setSelectedCell, showDiagonals}) {
         }
         onResize();
         window.addEventListener("resize", onResize);
-        setCanvasDrawInstructions([{type: "Arrow Sudoku", cells: [1,2,3,4]}]);
         return () => {
             window.removeEventListener("resize", onResize);
         }

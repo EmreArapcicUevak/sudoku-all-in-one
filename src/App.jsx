@@ -177,6 +177,18 @@ function App() {
                         }
                     });
                     break;
+                case "Arrow Sudoku":
+                    canvasDrawInstructions.forEach(item => {
+                        if (item.type === "Arrow Sudoku") {
+                            const cells = item.cells.map(it => {
+                                const xNum = Math.floor((it - 1) / 9) + 1;
+                                const yNum = (it - 1) % 9 + 1;
+                                return `X${xNum}${yNum}`;
+                            });
+                            additionalConstraints.push(["arrow", [...cells]]);
+                        }
+                    });
+                    break;
                 default:
                     console.log(`${rule.name} not implemented!!!`)
             }
