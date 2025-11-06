@@ -165,6 +165,18 @@ function App() {
                        }
                     });
                     break;
+                case "Thermo Sudoku":
+                    canvasDrawInstructions.forEach(item => {
+                        if (item.type === "Thermo Sudoku") {
+                            const cells = item.cells.map(it => {
+                                const xNum = Math.floor((it - 1) / 9) + 1;
+                                const yNum = (it - 1) % 9 + 1;
+                                return `X${xNum}${yNum}`;
+                            });
+                            additionalConstraints.push(["thermo", [...cells]]);
+                        }
+                    });
+                    break;
                 default:
                     console.log(`${rule.name} not implemented!!!`)
             }
@@ -193,7 +205,7 @@ function App() {
             <Keypad keyClicked={keyClicked}/>
         </>)}
         {isLoading && (<span className="text-6xl text-white font-semibold">Loading ...</span>)}
-        {showCellSelector && <CellSelector setShowCellSelector={setShowCellSelector}/>};
+        {showCellSelector && <CellSelector setShowCellSelector={setShowCellSelector}/>}
     </div>)
 }
 

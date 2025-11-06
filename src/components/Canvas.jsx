@@ -16,13 +16,6 @@ function Canvas(props) {
 
         canvasContext.clearRect(0, 0, canvasContext.canvas.width, canvasContext.canvas.height);
         drawCanvas(canvasDrawInstructions, cellSize);
-        /*
-        canvasContext.fillStyle = "green";
-        canvasContext.fillRect(10, 10, 100, 30);
-        canvasContext.lineWidth = 8;
-        canvasContext.arc(100, 100, 50, 0, Math.PI * 2, true);
-        canvasContext.stroke();
-        */
     }, [canvasDrawInstructions]);
 
     return(<canvas className={`absolute inset-0 pointer-events-none`} ref={canvasRef} {...props}></canvas>);
@@ -34,6 +27,12 @@ function drawCanvas(canvasDrawInstructions, cellSize) {
         switch (drawInstruction.type) {
             case "German Whisper":
                 drawGermanWhisper(drawInstruction, cellSize, 16);
+                break;
+            case "Thermo Sudoku":
+                drawThermoSudoku(drawInstruction, cellSize, 20);
+                break;
+            case "Arrow Sudoku":
+                drawArrowSudoku(drawInstruction, cellSize, 6);
                 break;
             default:
                 break;
@@ -55,6 +54,66 @@ function drawGermanWhisper(drawInstruction, cellSize, lineWidth) {
         const [x, y] = getCellPosition(drawInstruction.cells[i], cellSize);
 
         if (i === 0) {
+            canvasContext.moveTo(y + cellSize / 2 + lineWidth / 2, x + cellSize / 2 + lineWidth / 2);
+            continue;
+        }
+
+        canvasContext.lineTo(y + cellSize / 2 + lineWidth / 2, x + cellSize / 2 + lineWidth / 2);
+    }
+
+    canvasContext.stroke();
+}
+
+function drawThermoSudoku(drawInstruction, cellSize, lineWidth) {
+    if (drawInstruction.cells === 1) return;
+
+    canvasContext.lineWidth = lineWidth;
+    canvasContext.strokeStyle = "#d3d3d3";
+    canvasContext.lineCap = "round";
+    canvasContext.lineJoin = "round";
+
+    canvasContext.beginPath();
+
+    for (let i = 0; i < drawInstruction.cells.length; i++) {
+        const [x, y] = getCellPosition(drawInstruction.cells[i], cellSize);
+
+        if (i === 0) {
+            canvasContext.arc(y + cellSize / 2 + lineWidth / 2,
+                x + cellSize / 2 + lineWidth / 2,
+                cellSize * 0.25, 0, Math.PI * 2, false
+            );
+            canvasContext.fillStyle = "#d3d3d3";
+            canvasContext.fill();
+            canvasContext.moveTo(y + cellSize / 2 + lineWidth / 2, x + cellSize / 2 + lineWidth / 2);
+            continue;
+        }
+
+        canvasContext.lineTo(y + cellSize / 2 + lineWidth / 2, x + cellSize / 2 + lineWidth / 2);
+    }
+
+    canvasContext.stroke();
+}
+
+function drawArrowSudoku(drawInstruction, cellSize, lineWidth) {
+    if (drawInstruction.cells === 1) return;
+
+    canvasContext.lineWidth = lineWidth;
+    canvasContext.strokeStyle = "#d3d3d3";
+    canvasContext.lineCap = "round";
+    canvasContext.lineJoin = "round";
+
+    canvasContext.beginPath();
+
+    for (let i = 0; i < drawInstruction.cells.length; i++) {
+        const [x, y] = getCellPosition(drawInstruction.cells[i], cellSize);
+
+        if (i === 0) {
+            canvasContext.arc(y + cellSize / 2 + lineWidth / 2,
+                x + cellSize / 2 + lineWidth / 2,
+                cellSize * 0.25, 0, Math.PI * 2, false
+            );
+            canvasContext.fillStyle = "#ffffff";
+            canvasContext.fill();
             canvasContext.moveTo(y + cellSize / 2 + lineWidth / 2, x + cellSize / 2 + lineWidth / 2);
             continue;
         }
