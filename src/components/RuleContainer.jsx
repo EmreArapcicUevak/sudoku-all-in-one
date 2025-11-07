@@ -14,7 +14,7 @@ function RuleContainer({solve, canRun, selectedRule, onRuleClicked, appliedRules
                 {
                     appliedRules.filter(rule => rule.added === true).map(rule => {
                         return(
-                            <RuleItem name={rule.name} isRemovable={rule.name !== appliedRules[0].name} selectedRule={selectedRule} onRuleClicked={onRuleClicked} onDeleteRule={removeRule} setShowCellSelector={setShowCellSelector}/>
+                            <RuleItem key={rule.name} name={rule.name} isRemovable={rule.name !== appliedRules[0].name} selectedRule={selectedRule} onRuleClicked={onRuleClicked} onDeleteRule={removeRule} setShowCellSelector={setShowCellSelector}/>
                         );
                     })
                 }
