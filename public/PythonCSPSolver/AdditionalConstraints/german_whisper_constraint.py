@@ -18,4 +18,6 @@ def add_german_whisper_constraint(csp : ConstraintSatisfactionProblem, variables
         )
     )
 
+  return True
+
 __all__ = ['add_german_whisper_constraint']

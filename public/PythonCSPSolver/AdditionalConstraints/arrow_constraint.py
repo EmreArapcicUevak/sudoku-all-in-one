@@ -36,4 +36,6 @@ def add_arrow_constraint(csp : ConstraintSatisfactionProblem, variables : list[s
     constraint_func = lambda assignment: sum(assignment[current_temp_var_name]) == assignment[variables[0]],
   )) # Add the final constraint that makes sure that X0 is equal to the sum of other components
 
+  return True
+
 __all__ = ['add_arrow_constraint']

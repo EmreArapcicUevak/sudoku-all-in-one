@@ -12,7 +12,7 @@ def get_equal_constraint_func(index : int, depended_var : str, aux_var : str):
   return equal_constraint_func
 
 
-def add_cage_constraint(csp : ConstraintSatisfactionProblem, variables : list[str]):
+def add_cage_constraint(csp : ConstraintSatisfactionProblem, variables : list[str]) -> bool:
   assert len(variables) >= 2
 
   number = int(variables[0])
@@ -38,7 +38,7 @@ def add_cage_constraint(csp : ConstraintSatisfactionProblem, variables : list[st
     constraint_func = lambda assignment: sum(assignment[current_temp_var_name]) == number,
   )) # Add the final constraint that makes sure that X0 is equal to the sum of other components
 
-  node_constraint_propagation(csp, remove_constraints_after=True) # Get rid of all the combinations of other variables that cannot work
+  return node_constraint_propagation(csp, remove_constraints_after=True) # Get rid of all the combinations of other variables that cannot work
 
 
 __all__ = ['add_cage_constraint']

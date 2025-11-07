@@ -1,4 +1,4 @@
-aima_toolkit==2.1.0
+aima_toolkit==2.1.1
 iniconfig==2.3.0
 packaging==25.0
 pluggy==1.6.0

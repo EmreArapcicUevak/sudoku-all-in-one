@@ -24,4 +24,5 @@ def add_knights_move_constraint(csp: ConstraintSatisfactionProblem, variables: l
   for var in csp.variables:
     add_alldiff_constraint_as_binary_constraint(csp, compute_affected_variables(var))
 
+  return True
 __all__ = [ 'add_knights_move_constraint' ]

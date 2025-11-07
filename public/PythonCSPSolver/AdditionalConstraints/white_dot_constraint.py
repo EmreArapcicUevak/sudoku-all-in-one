@@ -9,4 +9,6 @@ def add_white_dot_constraint(csp : ConstraintSatisfactionProblem, variables : li
   assert len(set(variables)) == 2
   csp.add_constraint(Constraint(variables=variables, constraint_func=white_dot_constraint_func))
 
+  return True
+
 __all__ = ['add_white_dot_constraint']
