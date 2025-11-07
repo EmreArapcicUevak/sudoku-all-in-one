@@ -7,7 +7,7 @@ export default function CellSelectorCell({pos}) {
         <div className={``} onClick={(e) => {
             e.stopPropagation();
 
-            if (selectedRule === "Thermo Sudoku" || selectedRule === "Arrow Sudoku") {
+            if (selectedRule === "Thermo Sudoku" || selectedRule === "Arrow Sudoku" || selectedRule === "German Whisper") {
                 if (selectorSelectedCells.length === 0) {
                     setSelectorSelectedCells([pos]);
 
