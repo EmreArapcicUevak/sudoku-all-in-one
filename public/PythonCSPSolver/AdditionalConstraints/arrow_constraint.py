@@ -1,5 +1,4 @@
 from aima_toolkit.ConstraintSatisfactionProblemPackage import ConstraintSatisfactionProblem, Constraint
-from aima_toolkit.ConstraintSatisfactionProblemPackage.ConstraintPropagation import node_constraint_propagation
 from typing import Any
 from itertools import product
 
@@ -12,16 +11,15 @@ def get_equal_constraint_func(index : int, depended_var : str, aux_var : str):
   return equal_constraint_func
 
 
-def add_cage_constraint(csp : ConstraintSatisfactionProblem, variables : list[str]):
+def add_arrow_constraint(csp : ConstraintSatisfactionProblem, variables : list[str]):
   assert len(variables) >= 2
 
-  number = int(variables[0])
-  assert number > 0
-
-  current_temp_var_name = "temp_cage_0"
+  current_temp_var_name = "temp_arrow_0"
   for i in range(len(csp.variables)):
-    current_temp_var_name = f"temp_cage_{i}"
-    if current_temp_var_name not in csp.variables: break
+    if current_temp_var_name in csp.variables:
+      current_temp_var_name = f"temp_arrow_{i + 1}"
+    else:
+      break
 
   dependent_domains = [csp.domains[variable] for variable in variables[1:]]
   aux_variable_domain = set(product(*dependent_domains)) # Compute the cross product of the variable
@@ -34,11 +32,10 @@ def add_cage_constraint(csp : ConstraintSatisfactionProblem, variables : list[st
     )) # Link the two variables together
 
   csp.add_constraint(Constraint(
-    variables = [current_temp_var_name],
-    constraint_func = lambda assignment: sum(assignment[current_temp_var_name]) == number,
+    variables = [current_temp_var_name, variables[0]],
+    constraint_func = lambda assignment: sum(assignment[current_temp_var_name]) == assignment[variables[0]],
   )) # Add the final constraint that makes sure that X0 is equal to the sum of other components
 
-  node_constraint_propagation(csp, remove_constraints_after=True) # Get rid of all the combinations of other variables that cannot work
+  return True
 
-
-__all__ = ['add_cage_constraint']
+__all__ = ['add_arrow_constraint']

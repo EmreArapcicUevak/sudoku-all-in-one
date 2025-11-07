@@ -17,5 +17,6 @@ def add_thermo_constraint(csp: ConstraintSatisfactionProblem, variables: list[ s
       )
     )
 
+  return True
 
 __all__ = [ 'add_thermo_constraint' ]

@@ -55,7 +55,8 @@ def solve(grid : list[list[int]], additional_constraints : list[tuple[str, tuple
     constraint_name = constraint_name.lower()
     assert constraint_name in constraint_adding_functions.keys()
 
-    constraint_adding_functions[constraint_name](sudoku_csp, variables)
+    if constraint_adding_functions[constraint_name](sudoku_csp, variables) == False:
+      return False
 
   # try to cut down the domain at start, if found not possible return False to mark there is no solution
   if not ac3( sudoku_csp ): return False
