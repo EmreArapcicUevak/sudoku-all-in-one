@@ -57,20 +57,10 @@ export default function CellSelectorCell({pos}) {
             }
 
             if (selectedRule === "Killer Cage") {
-                if (killerCellTaken(pos, sudokuCages)) return;
 
-                if (selectorSelectedCells.length === 0) {
-                    setSelectorSelectedCells([pos]);
-
-
-                    const cages = [... sudokuCages];
-                    cages[cages.length - 1].cells = [pos];
-                    setSudokuCages([...cages]);
-                    return;
-                }
-
-                if (selectorSelectedCells.includes(pos)) {
+                if (selectorSelectedCells.includes(pos) && sudokuCages.at(-1).cells.includes(pos)) {
                     let cageCells = [...sudokuCages[sudokuCages.length - 1].cells];
+                    console.log(cageStillConnected(cageCells.filter(cell => cell !== pos)))
                     if (cageStillConnected(cageCells.filter(cell => cell !== pos))) {
                         cageCells = cageCells.filter(cell => cell !== pos);
                         const temp = structuredClone(sudokuCages);
@@ -86,6 +76,18 @@ export default function CellSelectorCell({pos}) {
                     return;
                 }
 
+
+                if (killerCellTaken(pos, sudokuCages)) return;
+
+                if (selectorSelectedCells.length === 0) {
+                    setSelectorSelectedCells([pos]);
+
+
+                    const cages = [... sudokuCages];
+                    cages[cages.length - 1].cells = [pos];
+                    setSudokuCages([...cages]);
+                    return;
+                }
 
 
                 if (selectorSelectedCells.length >= 9) return;
