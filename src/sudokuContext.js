@@ -12,6 +12,8 @@ export const sudokuContext = create((set) => ({
     tempCanvasDrawInstructions: [],
     cellSize: -1,
     sudokuPosition: [0, 0],
+    sudokuCages: [],
+    tempSudokuCages: [],
 
 
     setSelectedRule: (value) => set({selectedRule: value}),
@@ -25,4 +27,6 @@ export const sudokuContext = create((set) => ({
     setTempCanvasDrawInstructions: (value) => set({tempCanvasDrawInstructions: value}),
     setCellSize: value => set({cellSize: value}),
     setSudokuPosition: value => set({sudokuPosition: value}),
+    setSudokuCages: value => set({sudokuCages: value}),
+    setTempSudokuCages: value => set({tempSudokuCages: value}),
 }));

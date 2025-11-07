@@ -31,7 +31,8 @@ function App() {
     const [showCellSelector, setShowCellSelector] = useState(false);
 
     const _setSelectedRule = sudokuContext(state => state.setSelectedRule);
-    const {setKropkiDotsW, setKropkiDotsB, kropkiDotsB, kropkiDotsW, canvasDrawInstructions, setCanvasDrawInstructions} = sudokuContext();
+    const {setKropkiDotsW, setKropkiDotsB, kropkiDotsB, kropkiDotsW, canvasDrawInstructions,
+        setCanvasDrawInstructions, setSudokuCages, sudokuCages} = sudokuContext();
 
     const keyClicked = (kkey) => {
         const arr = [...gridContent];
@@ -71,6 +72,9 @@ function App() {
                 break;
             case "Kropki Dot Consecutive":
                 setKropkiDotsW([]);
+                break;
+            case "Killer Cage":
+                setSudokuCages([]);
                 break;
             default:
                 break;
@@ -187,6 +191,17 @@ function App() {
                             });
                             additionalConstraints.push(["arrow", [...cells]]);
                         }
+                    });
+                    break;
+                case "Killer Cage":
+                    sudokuCages.forEach(cage => {
+                        const cells = cage.cells.map(it => {
+                            const xNum = Math.floor((it - 1) / 9) + 1;
+                            const yNum = (it - 1) % 9 + 1;
+                            return `X${xNum}${yNum}`;
+                        });
+                        console.log(["cage", [`${cage.value}`,...cells]])
+                        additionalConstraints.push(["cage", [`${cage.value}`,...cells]]);
                     });
                     break;
                 default:

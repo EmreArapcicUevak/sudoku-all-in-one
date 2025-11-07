@@ -1,10 +1,22 @@
 import CellSelectorCell from "./CellSelectorCell.jsx";
 import {sudokuContext} from "../sudokuContext.js";
+import {useState} from "react";
 
 export default function CellSelector({setShowCellSelector}) {
     const [x, y] = sudokuContext(state => state.sudokuPosition);
     const {tempCanvasDrawInstructions, setCanvasDrawInstructions} = sudokuContext();
-    const {setSelectorSelectedCells} = sudokuContext();
+    const {setSelectorSelectedCells, selectedRule, setSudokuCages, tempSudokuCages, sudokuCages} = sudokuContext();
+    const [cageValue, setCageValue] = useState(0);
+
+    const onCageValueInputChange = (e) => {
+        let value = e.target.value;
+        if (value < 0) value = 0;
+        if (value > 45) value = 45;
+        const temp = structuredClone(sudokuCages);
+        temp.at(-1).value = value;
+        setSudokuCages(temp);
+        setCageValue(value);
+    };
 
     return (<div
         className="fixed inset-0 flex justify-center items-center z-50">
@@ -13,15 +25,25 @@ export default function CellSelector({setShowCellSelector}) {
                 e.stopPropagation();
                 setShowCellSelector(false);
                 setSelectorSelectedCells([]);
-            }}>Add</button>
+            }}>Add
+            </button>
             <button className={`m-4`} onClick={e => {
                 e.stopPropagation();
-                setCanvasDrawInstructions([...tempCanvasDrawInstructions]);
+                if (selectedRule === "Arrow Sudoku" || selectedRule === "German Whisper" || selectedRule === "Thermo Sudoku") {
+                    setCanvasDrawInstructions([...tempCanvasDrawInstructions]);
+                }
+                if (selectedRule === "Killer Cage") {
+                    setSudokuCages([...tempSudokuCages]);
+                }
                 setShowCellSelector(false);
                 setSelectorSelectedCells([]);
             }}>Cancel
             </button>
         </div>
+        {selectedRule === "Killer Cage" && <div className="fixed bottom-32 left-8 z-50 bg-[#1a1a1a] rounded-xl p-4">
+            <label htmlFor="cageValue">Cage value :    </label>
+            <input id="cageValue" type="number" value={cageValue} min={0} max={45} step={1} onChange={onCageValueInputChange}/>
+        </div>}
         <div className="fixed aspect-square h-[90%] p-2 outline-[900000px] outline-gray-900/50"
              style={{top: y, left: x}}>
             <div className="absolute inset-0 grid grid-cols-3 gap-2 top-2 left-2 right-2 bottom-2">
