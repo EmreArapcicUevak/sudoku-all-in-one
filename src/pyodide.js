@@ -45,7 +45,7 @@ async function setupPyodideEnvironment() {
     pyodide.FS.mkdir("/PythonCSPSolver/AdditionalConstraints");
 
     for (const file of files) {
-        const req = await fetch(`${import.meta.env.BASE_URL}PythonCSPSolver/requirements.txt${file}`);
+        const req = await fetch(`${import.meta.env.BASE_URL}${file}`);
         if (!req.ok) throw new Error(`Failed to fetch ${file}`);
         const content = await req.text();
         pyodide.FS.writeFile(file, content);
