@@ -3,18 +3,18 @@ import {loadPyodide} from "pyodide";
 let pyodide;
 
 const files = [
-    "/PythonCSPSolver/__init__.py",
-    "/PythonCSPSolver/sudoku_solver.py",
-    "/PythonCSPSolver/AdditionalConstraints/__init__.py",
-    "/PythonCSPSolver/AdditionalConstraints/arrow_constraint.py",
-    "/PythonCSPSolver/AdditionalConstraints/black_dot_constraint.py",
-    "/PythonCSPSolver/AdditionalConstraints/cage_constraint.py",
-    "/PythonCSPSolver/AdditionalConstraints/german_whisper_constraint.py",
-    "/PythonCSPSolver/AdditionalConstraints/kings_move_constraint.py",
-    "/PythonCSPSolver/AdditionalConstraints/knights_move_constraint.py",
-    "/PythonCSPSolver/AdditionalConstraints/sudoku_x_constraint.py",
-    "/PythonCSPSolver/AdditionalConstraints/thermo_constraint.py",
-    "/PythonCSPSolver/AdditionalConstraints/white_dot_constraint.py"
+    "PythonCSPSolver/__init__.py",
+    "PythonCSPSolver/sudoku_solver.py",
+    "PythonCSPSolver/AdditionalConstraints/__init__.py",
+    "PythonCSPSolver/AdditionalConstraints/arrow_constraint.py",
+    "PythonCSPSolver/AdditionalConstraints/black_dot_constraint.py",
+    "PythonCSPSolver/AdditionalConstraints/cage_constraint.py",
+    "PythonCSPSolver/AdditionalConstraints/german_whisper_constraint.py",
+    "PythonCSPSolver/AdditionalConstraints/kings_move_constraint.py",
+    "PythonCSPSolver/AdditionalConstraints/knights_move_constraint.py",
+    "PythonCSPSolver/AdditionalConstraints/sudoku_x_constraint.py",
+    "PythonCSPSolver/AdditionalConstraints/thermo_constraint.py",
+    "PythonCSPSolver/AdditionalConstraints/white_dot_constraint.py"
 ]
 
 async function setupPyodideEnvironment() {
@@ -23,7 +23,7 @@ async function setupPyodideEnvironment() {
     //load needed packages
     await pyodide.loadPackage("micropip");
 
-    const requirementsTxtFile = await fetch("/PythonCSPSolver/requirements.txt");
+    const requirementsTxtFile = await fetch(`${import.meta.env.BASE_URL}PythonCSPSolver/requirements.txt`);
     if (!requirementsTxtFile.ok) throw new Error("Failed to fetch requirements file.")
     const content = await requirementsTxtFile.text();
     const requiredPackages = content.split("\n").filter((x) => x !== "");
@@ -45,7 +45,7 @@ async function setupPyodideEnvironment() {
     pyodide.FS.mkdir("/PythonCSPSolver/AdditionalConstraints");
 
     for (const file of files) {
-        const req = await fetch(file);
+        const req = await fetch(`${import.meta.env.BASE_URL}PythonCSPSolver/requirements.txt${file}`);
         if (!req.ok) throw new Error(`Failed to fetch ${file}`);
         const content = await req.text();
         pyodide.FS.writeFile(file, content);
