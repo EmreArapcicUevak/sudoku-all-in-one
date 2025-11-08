@@ -41,8 +41,8 @@ async function setupPyodideEnvironment() {
     }
 
     // add files
-    pyodide.FS.mkdir("/PythonCSPSolver");
-    pyodide.FS.mkdir("/PythonCSPSolver/AdditionalConstraints");
+    ensureDirectoryExists("/PythonCSPSolver");
+    ensureDirectoryExists("/PythonCSPSolver/AdditionalConstraints");
 
     for (const file of files) {
         const req = await fetch(`${import.meta.env.BASE_URL}${file}`);
@@ -90,6 +90,15 @@ async function solveSudoku(grid, additionalConstraints) {
     console.log(result);
     return result.flat();
 
+}
+
+function ensureDirectoryExists(path) {
+    try {
+        pyodide.FS.mkdir(path);
+    }
+    catch (e) {
+        if (e.errno !== 17) throw e; // ignore the directory already exists error
+    }
 }
 
 export {setupPyodideEnvironment, solveSudoku};
