@@ -48,7 +48,7 @@ async function setupPyodideEnvironment() {
         const req = await fetch(`${import.meta.env.BASE_URL}${file}`);
         if (!req.ok) throw new Error(`Failed to fetch ${file}`);
         const content = await req.text();
-        pyodide.FS.writeFile(file, content);
+        pyodide.FS.writeFile(`/${file}`, content);
         console.log(`Loaded file : ${file}`);
     }
 
